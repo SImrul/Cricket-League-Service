@@ -18,6 +18,14 @@ public class Player {
 	public Player() {
 	}
 
+	public Player(String nameFirst, String nameLast, SKILLS skill, Team memberOf) {
+		super();
+		this.nameFirst = nameFirst;
+		this.nameLast = nameLast;
+		this.skill = skill;
+		this.memberOf = memberOf;
+	}
+
 	public int getPlayerId() {
 		return playerId;
 	}
@@ -44,9 +52,12 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "{Player: {nameFirst: " + this.nameFirst + ", nameLast: " + this.nameLast + ", nameDisplay: "
-				+ this.nameDisplay + ", Date of Birth: " + this.DOB
-				// + ", Skill: " + this.getSkillDisplay()
+		return "{" +
+				"nameFirst: " + this.nameFirst 
+				+ ", " + "nameLast: " + this.nameLast 
+				+ ", " + "nameDisplay: " + this.nameDisplay 
+				+ ", " + "Date of Birth: " + this.DOB
+				+ ", " + "Skill: " + this.getSkillDisplay()
 				+ "}";
 	}
 

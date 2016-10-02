@@ -15,8 +15,6 @@ public class Application {
 		
 		
 		Team team1 = (Team)beanContext.getBean("team");
-		List<Player> squad = team1.getSquad();
-		System.out.println(squad);
 		List<Player> teamMembers = team1.getPlayers();
 		System.out.println(teamMembers);
 	}
