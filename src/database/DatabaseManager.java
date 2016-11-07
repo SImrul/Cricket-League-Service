@@ -1,23 +1,41 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import beans.Match;
 import beans.Personnel;
+import beans.PlayGround;
 import beans.Personnel.ROLE;
 import beans.Player;
+import beans.Schedule;
 import beans.Team;
 import beans.Tournament;
+import exceptions.NameExistsException;
+import exceptions.ScheduleConflictException;
+import util.Key;
 import util.PersonnelUtil;
 
 public class DatabaseManager {
+	
+	private static DatabaseManager instance = new DatabaseManager();
 
 	private List<Player> players = new ArrayList<>();
 	private List<Team> teams = new ArrayList<>();
 	private List<Tournament> tournaments = new ArrayList<>();
+	private Schedule generalSchedule = new Schedule();
 
+	private DatabaseManager() {
+	}
+	
+	public static DatabaseManager getInstance() {
+		return instance;
+	}
+	
 	public boolean AddPlayer(Player player) {
 		if (player == null)
 			return false;
@@ -111,5 +129,66 @@ public class DatabaseManager {
 		}
 		System.out.println("out of loop.");
 		return null;
+	}
+	
+	public Tournament getTournament(Key key) {
+		for(Tournament t : this.tournaments) {
+			if(t.getTkey().equals(key)) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Currently only support one word or more that are part of the name, it doesn't
+	 * search by each word if multiple words are provided.
+	 * 
+	 * @param searchKey
+	 * @return list of {@link Tournament} or empty if not found.
+	 */
+	public List<Tournament> findTournament(String searchKey) {
+		// TODO: find by multiple words
+		List<Tournament> matched = new ArrayList<Tournament>();
+		for(Tournament t: this.tournaments) {
+			if(t.getName() != null && t.getName().matches("*" + searchKey + "*")) {
+				matched.add(t);
+			}
+		}
+		return matched;
+	}
+	
+	public boolean addGeneralMatch(Match newMatch, PlayGround ground) throws ScheduleConflictException, NameExistsException{
+		if(newMatch == null || ground == null) {
+			return false;
+		}
+		// If another match is scheduled in this ground
+		for (Match m : this.generalSchedule.getMatches()) {
+			if (m.getKey().equals(newMatch.getKey())) {
+				throw new NameExistsException(
+						"Match exists with same name; names are not case sensitive and spaces are not counted while matching names.");
+			}
+			// if the new game is in same ground, check hours of play conflict
+			PlayGround p = this.generalSchedule.getMatchGround(m);
+			if (p == ground) {
+				long milliseconds = 1 * 60 * 60 * 1000;
+				// Does the new match starts within the existing game's hours?
+				if (newMatch.getStartTime().getTime() > m.getStartTime().getTime() && newMatch.getStartTime()
+						.getTime() <= (m.getStartTime().getTime() + m.getPlayHours() * milliseconds)) {
+					throw new ScheduleConflictException("The new game starts within the game time of another match."
+							+ "Existing match: " + m.toString());
+				}
+				// Does the new match game time extends after the start time of an existing game?
+				else if (newMatch.getStartTime().getTime() < m.getStartTime().getTime()
+						&& newMatch.getStartTime().getTime() + newMatch.getPlayHours() * milliseconds >= m
+								.getStartTime().getTime()) {
+					throw new ScheduleConflictException("The new game finishes within the game time of another match."
+							+ "Existing match: " + m.toString());
+				}
+			}
+			
+		}
+		this.generalSchedule.registerMatch(newMatch, ground);
+		return true;
 	}
 }

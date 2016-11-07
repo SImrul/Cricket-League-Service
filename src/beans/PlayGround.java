@@ -31,6 +31,15 @@ public class PlayGround {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof PlayGround)) return false;
+		PlayGround p = (PlayGround) obj;
+		if(p.getName() == null || p.getName().trim().length() == 0)
+			return false;
+		return this.name.equalsIgnoreCase(p.getName());
+	}
+	
+	@Override
 	public String toString() {
 		return "{" 
 				+ "name: " + this.name

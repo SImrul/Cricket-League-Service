@@ -12,7 +12,7 @@ import database.DatabaseManager;
 
 public class DatabaseManagerTests {
 
-	DatabaseManager dm = new DatabaseManager();
+	DatabaseManager dm = DatabaseManager.getInstance();
 
 	@Test
 	public void testGetPlayerByName() {

@@ -17,7 +17,7 @@ public class Team {
 	private List<Player> players;
 
 	public Team() {
-		System.out.println("Team created.");
+//		System.out.println("Team created.");
 	}
 
 	public Team(String name) {

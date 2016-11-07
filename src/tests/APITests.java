@@ -18,6 +18,7 @@ public class APITests {
 		Tournament tournament = new Tournament("KC Cricket League");
 		Schedule schedule = new Schedule();
 		PlayGround ground1 = new PlayGround("Olathe");
+		PlayGround ground2 = new PlayGround("Pflumn");
 
 		// Add Teams
 		Team tigers = new Team("Tigers");
@@ -28,18 +29,26 @@ public class APITests {
 		tournament.addTeam(umkc);
 		tournament.addTeam(indians);
 
-		// Create Matches
+		// Create Squads
 		Squad tigerSquad = new Squad(tigers, true);
 		tigerSquad.setPlayers(this.generateSquadPlayers(tigers));
 		Squad umkcSquad = new Squad(umkc, false);
 		umkcSquad.setPlayers(this.generateSquadPlayers(umkc));
+		Squad indianSquad = new Squad(indians, false);
+		indianSquad.setPlayers(this.generateSquadPlayers(indians));
+		
+		// Create Matches
 		Match m1 = new Match("M1", tigerSquad, umkcSquad, Match.MatchType.ODI);
-
+		Match m2 = new Match("M2", tigerSquad, indianSquad, Match.MatchType.ODI);
 		//System.out.println(m1.toString());
 
-		tournament.addMatch(m1);
+		// Schedule tournament
+//		tournament.addMatch(m1);
 		schedule.registerMatch(m1, ground1);
+//		tournament.addMatch(m2);
+		schedule.registerMatch(m2, ground2);
 		System.out.println(schedule);
+		
 
 	}
 

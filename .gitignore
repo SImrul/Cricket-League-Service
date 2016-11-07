@@ -1,0 +1,14 @@
+# Keep the gitignore file
+!.gitignore
+
+# do not add .class files
+/target/classes/**/*.class
+
+# Following are eclipse specific settings that don't need to be in git repp.
+.classpath
+.project
+.settings
+.springBeans
+
+/build/
+/target/
