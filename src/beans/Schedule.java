@@ -36,6 +36,11 @@ public class Schedule {
 		return this.matchVenues.values();
 	}
 	
+	public boolean removeMatch(Match m) {
+		this.matchVenues.remove(m);
+		return true;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

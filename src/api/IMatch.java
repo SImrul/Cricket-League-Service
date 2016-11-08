@@ -5,7 +5,7 @@ import java.util.Date;
 import beans.Match;
 import beans.PlayGround;
 import beans.Squad;
-import exceptions.InvalidMatchTimeException;
+import beans.Match.MatchType;
 import exceptions.NameExistsException;
 import exceptions.ScheduleConflictException;
 
@@ -21,11 +21,11 @@ public interface IMatch {
 	 * @param ground
 	 * @param time
 	 * @return Match object
-	 * @throws InvalidMatchTimeException
 	 * @throws NameExistsException
+	 * @throws ScheduleConflictException
 	 */
-	public Match AddMatch(String matchName, Squad homeSquad, Squad awaySquad, PlayGround ground, Date time)
-			throws InvalidMatchTimeException, NameExistsException, Exception;
+	public Match AddMatch(String matchName, MatchType mType, Squad homeSquad, Squad awaySquad, PlayGround ground, Date time)
+			throws NameExistsException, ScheduleConflictException;
 	
 	
 	/**
@@ -41,6 +41,6 @@ public interface IMatch {
 	 * @param time
 	 * @return Match object or NULL
 	 */
-	public Match AddTournamentMatch(String tournamentKey, String matchName, Squad homeSquad, Squad awaySquad,
+	public Match AddTournamentMatch(String tournamentKey, String matchName, MatchType mType, Squad homeSquad, Squad awaySquad,
 			PlayGround ground, Date time) throws ScheduleConflictException;
 }

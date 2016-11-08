@@ -1,8 +1,6 @@
 package database;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import beans.Match;
 import beans.Personnel;
 import beans.PlayGround;
-import beans.Personnel.ROLE;
 import beans.Player;
 import beans.Schedule;
 import beans.Team;
@@ -164,7 +161,7 @@ public class DatabaseManager {
 		}
 		// If another match is scheduled in this ground
 		for (Match m : this.generalSchedule.getMatches()) {
-			if (m.getKey().equals(newMatch.getKey())) {
+			if (m.equals(newMatch)) {
 				throw new NameExistsException(
 						"Match exists with same name; names are not case sensitive and spaces are not counted while matching names.");
 			}
@@ -179,16 +176,30 @@ public class DatabaseManager {
 							+ "Existing match: " + m.toString());
 				}
 				// Does the new match game time extends after the start time of an existing game?
-				else if (newMatch.getStartTime().getTime() < m.getStartTime().getTime()
-						&& newMatch.getStartTime().getTime() + newMatch.getPlayHours() * milliseconds >= m
-								.getStartTime().getTime()) {
+				else if (newMatch.getStartTime().getTime() < m.getStartTime().getTime() 
+						&& m.getStartTime() .getTime() <= 
+							(newMatch.getStartTime().getTime() + newMatch.getPlayHours() * milliseconds)) {
 					throw new ScheduleConflictException("The new game finishes within the game time of another match."
 							+ "Existing match: " + m.toString());
 				}
 			}
-			
 		}
+		// When all validation passes, add the match in schedule
 		this.generalSchedule.registerMatch(newMatch, ground);
 		return true;
+	}
+	
+	public Match getGeneralMatch(Key mKey) {
+		if(mKey == null) return null;
+		for(Match m : this.generalSchedule.getMatches()) {
+			if(m.getKey().equals(mKey)) {
+				return m;
+			}
+		}
+		return null;
+	}
+	
+	public boolean removeMatch(Match match) {
+		return this.generalSchedule.removeMatch(match);
 	}
 }

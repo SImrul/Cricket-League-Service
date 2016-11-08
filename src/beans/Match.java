@@ -78,6 +78,10 @@ public class Match implements Searchable{
 		return startTime;
 	}
 	
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	
 	public int getPlayHours() {
 		switch (this.matchType) {
 		case ODI:
@@ -95,7 +99,9 @@ public class Match implements Searchable{
 	public int hashCode() {
 		return this.mKey.hashCode();
 	}
-	
+	/**
+	 * Matches are equal when the have the same {@link Key}.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Match)) {
