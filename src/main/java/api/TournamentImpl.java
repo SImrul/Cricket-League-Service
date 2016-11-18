@@ -26,15 +26,17 @@ public class TournamentImpl implements ITournament {
 //				|| name.trim().length() < 6
 				)
 			return null;
-		
 		/* First check if a tournament exists with exact name (Case in-sensitive) */
 		for (Tournament t : this.findTournament(name)) {
 			if (t.getName().equalsIgnoreCase(name))
+				// TODO Add log instead of sysout
+				System.out.println("Found an existing tournament.");
 				return t;
 		}
 		
 		Tournament tournament = new Tournament(name.trim());
 		DatabaseManager.getInstance().AddTournament(tournament);
+		System.out.println("Created a new tournament.");
 		return tournament;
 	}
 

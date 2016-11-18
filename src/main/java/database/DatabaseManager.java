@@ -148,7 +148,7 @@ public class DatabaseManager {
 		// TODO: find by multiple words
 		List<Tournament> matched = new ArrayList<Tournament>();
 		for(Tournament t: this.tournaments) {
-			if(t.getName() != null && t.getName().matches("*" + searchKey + "*")) {
+			if(t.getName() != null && t.getName().matches(searchKey)) {
 				matched.add(t);
 			}
 		}
